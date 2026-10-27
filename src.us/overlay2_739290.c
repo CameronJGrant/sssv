@@ -857,64 +857,50 @@ void func_80328918_739FC8(void) {
 }
 
 #if 0
+// WIP: 544 words off (your draft: 942). size, frame and save set exact (no s-regs); unk0/unk16C use &gAnimalState.unk0[EVO], not EVO_TRANSFER
 // ESA: func_8007FD90
 // CURRENT (9821)
 void func_80328ACC_73A17C(void) {
-    s16 temp_a0;
-    s16 currentDist;
     s16 i;
-
-    s16 bestDistance;
-    s16 yPos;
-    s16 zPos;
     s16 xPos;
-
-    u16 animalId;
-
+    s16 zPos;
+    s16 yPos;
     // s16 sp8E;
     // s16 sp8C;
     // s16 sp8A;
     // s16 sp88;
     s16 sp86;
-
-    u8 doSwap; // can swap?
-    u8 tmp;
-    s16 tempAnimalIndex;
-
+    s16 currentDist;
+    s16 bestDistance;
     // s16 sp84;
     // s16 sp82;
     s16 sp80; // index of animal to swap with
+    s16 temp_a0;
+    s16 hd;
     s16 sp7A;
     s16 sp78;
-
-    Animal *currentAnimal;
-    Animal *otherAnimal;
-
-    s32 sp40; // curently sp70!?
+    u8 doSwap; // can swap?
 
     if (((D_803F2D50.textureBank != 3) || (D_803F2D50.segment != 2)) &&
         ((D_803F2D50.textureBank != 5) || (D_803F2D50.segment != 0)) &&
         ((D_803F2D50.textureBank != 4) || (D_803F2D50.segment != 1)) &&
         (D_803F2D50.segment != 5U)) {
 
-        sp40 = gCurrentAnimalIndex;
-        animalId = gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType;
 
         if (((gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != EVO))) {
 
             if (((gAnimalState.animals[gCurrentAnimalIndex].animal->unk320 == NULL) || (gAnimalState.animals[gCurrentAnimalIndex].animal->unk320->unk16C->behaviourFlags.unk2 == 0)) &&
-                (animalId != VULTURE) && (animalId != SEAGULL2) && (animalId != POLAR_BEAR_DEFENDING) &&
-                (animalId != PARROT_ATTACKING) && (animalId != HARD_MOUSE) && (animalId != CRAZY_BEAR) &&
-                (animalId != TORTOISE_TANK_DEFENDING) && (animalId != CRAZY_HUSKY) && (animalId != CROW_DIVER) &&
-                (animalId != DESERT_FOX_ATTACKING) && (animalId != SNEAKY_CHAMELEON) && (animalId != RACING_TORTOISE_DEFENDING) &&
+                (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != VULTURE) && (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != SEAGULL2) && (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != POLAR_BEAR_DEFENDING) &&
+                (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != PARROT_ATTACKING) && (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != HARD_MOUSE) && (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != CRAZY_BEAR) &&
+                (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != TORTOISE_TANK_DEFENDING) && (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != CRAZY_HUSKY) && (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != CROW_DIVER) &&
+                (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != DESERT_FOX_ATTACKING) && (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != SNEAKY_CHAMELEON) && (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType != RACING_TORTOISE_DEFENDING) &&
                 (gAnimalState.animals[gCurrentAnimalIndex].animal->unk4A <= 0)) {
 
-                currentAnimal = gAnimalState.animals[gCurrentAnimalIndex].animal;
 
-                xPos = currentAnimal->position.xPos.h;
-                zPos = currentAnimal->position.zPos.h;
-                yPos = currentAnimal->position.yPos.h;
-                sp86 = (currentAnimal->unk42 >> 1) + yPos;
+                xPos = gAnimalState.animals[gCurrentAnimalIndex].animal->position.xPos.h;
+                zPos = gAnimalState.animals[gCurrentAnimalIndex].animal->position.zPos.h;
+                yPos = gAnimalState.animals[gCurrentAnimalIndex].animal->position.yPos.h;
+                sp86 = (gAnimalState.animals[gCurrentAnimalIndex].animal->unk42 >> 1) + yPos;
 
                 bestDistance = 129;
 
@@ -923,13 +909,12 @@ void func_80328ACC_73A17C(void) {
                     // why not start with i = 1 ?
                     if (i != 0) {
                         if (i != gCurrentAnimalIndex) {
-                            otherAnimal = gAnimalState.animals[i].animal;
-                            if ((otherAnimal != NULL) && (otherAnimal->movementMode == MOVEMENT_MODE_DEACTIVATED) && (otherAnimal->unk4A == 0)) {
-                                if ((ABS(otherAnimal->position.xPos.h - xPos) < 0x81) &&
-                                    (ABS(otherAnimal->position.zPos.h - zPos) < 0x81) &&
-                                    (ABS(((otherAnimal->unk42 >> 1) + otherAnimal->position.yPos.h) - sp86) < 0x81)) {
+                            if ((gAnimalState.animals[i].animal != NULL) && (gAnimalState.animals[i].animal->movementMode == MOVEMENT_MODE_DEACTIVATED) && (gAnimalState.animals[i].animal->unk4A == 0)) {
+                                if ((ABS(gAnimalState.animals[i].animal->position.xPos.h - xPos) < 0x81) &&
+                                    (ABS(gAnimalState.animals[i].animal->position.zPos.h - zPos) < 0x81) &&
+                                    (ABS(((gAnimalState.animals[i].animal->unk42 >> 1) + gAnimalState.animals[i].animal->position.yPos.h) - sp86) < 0x81)) {
 
-                                    currentDist = MAX(MAX(ABS(otherAnimal->position.xPos.h - xPos), ABS(otherAnimal->position.zPos.h - zPos)), (ABS(otherAnimal->position.yPos.h - yPos) * 2));
+                                    currentDist = MAX(MAX(ABS(gAnimalState.animals[i].animal->position.xPos.h - xPos), ABS(gAnimalState.animals[i].animal->position.zPos.h - zPos)), (ABS(gAnimalState.animals[i].animal->position.yPos.h - yPos) * 2));
                                     // new candidate
                                     if (currentDist < bestDistance) {
                                         if (func_80329BAC_73B25C(gCurrentAnimalIndex, i) != 0) {
@@ -946,8 +931,7 @@ void func_80328ACC_73A17C(void) {
 
                 // any animals close?
                 if (bestDistance < 0x81) {
-                    if (sp40 != 0) {
-                        Animal *a;
+                    if (gCurrentAnimalIndex != 0) {
 
                         func_8032AA94_73C144();
 
@@ -967,31 +951,33 @@ void func_80328ACC_73A17C(void) {
                         gAnimalState.animals[0].animal->unk4A = 0;
                         gAnimalState.animals[gCurrentAnimalIndex].animal->unk4A = 0;
 
-                        tmp = gAnimalState.animals[0].animal->unk4C.unk1A;
+                        hd = gAnimalState.animals[0].animal->unk4C.unk1A;
                         gAnimalState.animals[0].animal->unk4C.unk1A = gAnimalState.animals[gCurrentAnimalIndex].animal->unk4C.unk1A;
-                        gAnimalState.animals[gCurrentAnimalIndex].animal->unk4C.unk1A = tmp;
+                        gAnimalState.animals[gCurrentAnimalIndex].animal->unk4C.unk1A = hd;
 
+do {
                         D_803D5520 = &gAnimalState.animals[gCurrentAnimalIndex];
                         D_803D5524 = gAnimalState.animals[gCurrentAnimalIndex].unk0;
                         D_803D5528 = gAnimalState.animals[gCurrentAnimalIndex].animal;
-                        D_803D552C = D_803D5528;
                         D_803D5530 = D_803D5528;
-
-                        if (1) {};
-
+                        D_803D552C = D_803D5528;
+} while (0);
+do {
                         D_803D5538 = 1;
                         D_803D553C = gCurrentAnimalIndex; //??
                         D_803D553A = 0;
+} while (0);
 
                         D_803D552C->movementMode = MOVEMENT_MODE_DEACTIVATED;
 
                         func_80328918_739FC8();
                         func_802C9BA4_6DB254((Entity *) D_803D5530);
 
-                        tempAnimalIndex = gCurrentAnimalIndex;
+                        hd = gCurrentAnimalIndex;
+                        D_803D5536 = hd;
                         gCurrentAnimalIndex = 0;
-                        D_803D5536 = tempAnimalIndex;
 
+do {
                         D_803D5520 = &gAnimalState.animals[0];
                         D_803D5524 = gAnimalState.animals[0].unk0;
                         D_803D5528 = gAnimalState.animals[0].animal;
@@ -1006,16 +992,17 @@ void func_80328ACC_73A17C(void) {
 
                         D_803D553C = 0;
                         D_803D553A = 0;
+} while (0);
 
                         D_803D552C->movementMode = MOVEMENT_MODE_NORMAL;
                         D_803D552C->unk328 = gGameplayTick;
                         D_803D552C->unk36A = 2;
 
-                        D_803D5520->unk0 = &gAnimalState.unk0[EVO_TRANSFER];
-                        D_803D5530->unk16C = &gAnimalState.unk0[EVO_TRANSFER];
+                        D_803D5520->unk0 = &gAnimalState.unk0[EVO];
+                        D_803D5530->unk16C = &gAnimalState.unk0[EVO];
 
-                        gCurrentAnimalId = EVO;
                         D_803E9820 = 27;
+                        gCurrentAnimalId = EVO;
                         D_803E9822 = 2;
 
                         func_80327DA8_739458();
@@ -1025,10 +1012,10 @@ void func_80328ACC_73A17C(void) {
                         D_803D552C->unk30A = gAnimalState.animals[D_803D5536].animal->position.zPos.h;
                         D_803D552C->unk30C = gAnimalState.animals[D_803D5536].animal->position.yPos.h + (gAnimalState.animals[D_803D5536].unk0->height / 2) ;
                         D_803D5530->position.xPos.h = D_803D552C->unk308;
-                        D_803D5530->position.zPos.h = D_803D552C->unk30A;
                         D_803D5530->position.yPos.h = D_803D552C->unk30C;
-                        D_803D552C->unk365 = ATTACK_EVO_CHIP_2;
+                        D_803D5530->position.zPos.h = D_803D552C->unk30A;
                         D_803D552C->unk32A = gGameplayTick;
+                        D_803D552C->unk365 = ATTACK_EVO_CHIP_2;
                         D_803D552C->unk320 = gAnimalState.animals[sp80].animal;
                         D_803D552C->unk30E = sp80;
                         D_803D5530->unk163 = gAnimalState.animals[D_803D5536].animal->unk163;
@@ -1044,13 +1031,14 @@ void func_80328ACC_73A17C(void) {
 
                         play_sound_effect_at_location(SFX_EVO_TRANSFER, 0x5000, 0, D_803D5530->position.xPos.h, D_803D5530->position.zPos.h, D_803D5530->position.yPos.h, 1.0f);
                     } else {
+do {
                         D_803D5520 = &gAnimalState.animals[0];
                         D_803D5524 = gAnimalState.animals[0].unk0;
                         D_803D5528 = gAnimalState.animals[0].animal;
                         D_803D552C = D_803D5528;
                         D_803D5530 = D_803D5528;
 
-                        if (sp40 == 0) {
+                        if (gCurrentAnimalIndex == 0) {
                             D_803D5538 = 1;
                         } else {
                             D_803D5538 = 0;
@@ -1058,9 +1046,10 @@ void func_80328ACC_73A17C(void) {
 
                         D_803D553C = 0;
                         D_803D553A = 0;
+} while (0);
 
-                        D_803D5520->unk0 = &gAnimalState.unk0[EVO_TRANSFER]; // D_801DD8EC
-                        D_803D5530->unk16C = &gAnimalState.unk0[EVO_TRANSFER];
+                        D_803D5520->unk0 = &gAnimalState.unk0[EVO]; // D_801DD8EC
+                        D_803D5530->unk16C = &gAnimalState.unk0[EVO];
 
                         gCurrentAnimalId = EVO;
                         D_803E9820 = 27;
@@ -1068,8 +1057,8 @@ void func_80328ACC_73A17C(void) {
 
                         func_80327DA8_739458();
                         D_803D552C->unk308 = gAnimalState.animals[0].animal->position.xPos.h;
-                        D_803D552C->unk30A = gAnimalState.animals[0].animal->position.zPos.h;
                         D_803D552C->unk30C = gAnimalState.animals[0].animal->position.yPos.h + (gAnimalState.animals[0].unk0->height / 2);
+                        D_803D552C->unk30A = gAnimalState.animals[0].animal->position.zPos.h;
                         D_803D552C->unk365 = ATTACK_EVO_CHIP_2;
                         D_803D552C->unk32A = gGameplayTick;
                         D_803D552C->unk320 = gAnimalState.animals[sp80].animal;
@@ -1077,14 +1066,13 @@ void func_80328ACC_73A17C(void) {
                         play_sound_effect_at_location(SFX_UNKNOWN_56, 0x5000, 0, D_803D5530->position.xPos.h, D_803D5530->position.zPos.h, D_803D5530->position.yPos.h, 1.0f);
                     }
                 } else {
-                    temp_a0 = (func_80310EE4_722594(gAnimalState.animals[sp40].animal->position.xPos.h, gAnimalState.animals[sp40].animal->position.zPos.h, gAnimalState.animals[sp40].animal->unk160) >> 0x10);
-                    currentAnimal = gAnimalState.animals[gCurrentAnimalIndex].animal;
-                    temp_a0 = currentAnimal->position.yPos.h - temp_a0;
+                    hd = (func_80310EE4_722594(gAnimalState.animals[gCurrentAnimalIndex].animal->position.xPos.h, gAnimalState.animals[gCurrentAnimalIndex].animal->position.zPos.h, gAnimalState.animals[gCurrentAnimalIndex].animal->unk160) >> 0x10);
+                        hd = gAnimalState.animals[gCurrentAnimalIndex].animal->position.yPos.h - hd;
 
                     if ((gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType == FIRE_FOX) ||
                         (gAnimalState.animals[gCurrentAnimalIndex].unk0->animalType == FLYING_DOG)) {
-                        if (temp_a0 < 0x80) {
-                            func_80311A2C_7230DC(currentAnimal->position.xPos.h, currentAnimal->position.zPos.h, &sp7A, &sp78, currentAnimal->unk160);
+                        if (hd < 0x80) {
+                            func_80311A2C_7230DC(gAnimalState.animals[gCurrentAnimalIndex].animal->position.xPos.h, gAnimalState.animals[gCurrentAnimalIndex].animal->position.zPos.h, &sp7A, &sp78, gAnimalState.animals[gCurrentAnimalIndex].animal->unk160);
 
                             if ((ABS(sp7A) < 12) && (ABS(sp78) < 12)) {
                                 doSwap = 1;
@@ -1096,9 +1084,9 @@ void func_80328ACC_73A17C(void) {
                         } else {
                             doSwap = 0;
                         }
-                    } else if ((currentAnimal->xVelocity.w != 0) || (currentAnimal->zVelocity.w != 0) || (currentAnimal->yVelocity.w > 0) ||
-                        (((currentAnimal->movementState != MOVEMENT_STATE_GROUND)) && (currentAnimal->movementState != MOVEMENT_STATE_FLYING)) ||
-                        (((currentAnimal->unk6C != NULL)) && ((currentAnimal->unk6C->unk16C->objectType != OBJECT_BUTTON)) && ((currentAnimal->unk6C->unk16C->objectType != OBJECT_FLAT_BLOCK_1) || (temp_a0 >= 0x20)))) {
+                    } else if ((gAnimalState.animals[gCurrentAnimalIndex].animal->xVelocity.w != 0) || (gAnimalState.animals[gCurrentAnimalIndex].animal->zVelocity.w != 0) || (gAnimalState.animals[gCurrentAnimalIndex].animal->yVelocity.w > 0) ||
+                        (((gAnimalState.animals[gCurrentAnimalIndex].animal->movementState != MOVEMENT_STATE_GROUND)) && (gAnimalState.animals[gCurrentAnimalIndex].animal->movementState != MOVEMENT_STATE_FLYING)) ||
+                        (((gAnimalState.animals[gCurrentAnimalIndex].animal->unk6C != NULL)) && ((gAnimalState.animals[gCurrentAnimalIndex].animal->unk6C->unk16C->objectType != OBJECT_BUTTON)) && ((gAnimalState.animals[gCurrentAnimalIndex].animal->unk6C->unk16C->objectType != OBJECT_FLAT_BLOCK_1) || (hd >= 0x20)))) {
                         // logic feels weird, should it all be inverted?
                         doSwap = 0;
                     } else {
@@ -1125,10 +1113,11 @@ void func_80328ACC_73A17C(void) {
                             gAnimalState.animals[0].animal->unk4A = 0;
                             gAnimalState.animals[gCurrentAnimalIndex].animal->unk4A = 0;
 
-                            tmp = gAnimalState.animals[0].animal->unk4C.unk1A;
+                            hd = gAnimalState.animals[0].animal->unk4C.unk1A;
                             gAnimalState.animals[0].animal->unk4C.unk1A = gAnimalState.animals[gCurrentAnimalIndex].animal->unk4C.unk1A;
-                            gAnimalState.animals[gCurrentAnimalIndex].animal->unk4C.unk1A = tmp;
+                            gAnimalState.animals[gCurrentAnimalIndex].animal->unk4C.unk1A = hd;
 
+do {
                             D_803D5520 = &gAnimalState.animals[gCurrentAnimalIndex];
                             D_803D5524 = gAnimalState.animals[gCurrentAnimalIndex].unk0;
                             D_803D5528 = gAnimalState.animals[gCurrentAnimalIndex].animal;
@@ -1138,6 +1127,7 @@ void func_80328ACC_73A17C(void) {
                             D_803D5538 = 1;
                             D_803D553C = gCurrentAnimalIndex;
                             D_803D553A = 0;
+} while (0);
 
                             D_803D552C->movementMode = MOVEMENT_MODE_DEACTIVATED;
 
@@ -1145,15 +1135,16 @@ void func_80328ACC_73A17C(void) {
 
                             D_803D5530->Info.health = 0;
 
-                            tempAnimalIndex = gCurrentAnimalIndex;
+                            hd = gCurrentAnimalIndex;
                             gCurrentAnimalIndex = 0;
-                            D_803D5536 = tempAnimalIndex;
+                            D_803D5536 = hd;
 
+do {
                             D_803D5520 = &gAnimalState.animals[0];
                             D_803D5524 = gAnimalState.animals[0].unk0;
                             D_803D5528 = gAnimalState.animals[0].animal;
-                            D_803D552C = D_803D5528;
                             D_803D5530 = D_803D5528;
+                            D_803D552C = D_803D5528;
 
                             if (gCurrentAnimalIndex == 0) {
                                 D_803D5538 = 1;
@@ -1162,6 +1153,7 @@ void func_80328ACC_73A17C(void) {
                             }
                             D_803D553C = 0;
                             D_803D553A = 0;
+} while (0);
 
                             D_803D552C->movementMode = MOVEMENT_MODE_NORMAL;
                             D_803D552C->unk328 = gGameplayTick;
@@ -1174,8 +1166,8 @@ void func_80328ACC_73A17C(void) {
                             }
 
                             D_803D5530->unk18C.length = gAnimalState.animals[D_803D5536].animal->unk18C.length;
-                            D_803D5520->unk0 = &gAnimalState.unk0[EVO_TRANSFER];
-                            D_803D5530->unk16C = &gAnimalState.unk0[EVO_TRANSFER];
+                            D_803D5520->unk0 = &gAnimalState.unk0[EVO];
+                            D_803D5530->unk16C = &gAnimalState.unk0[EVO];
                             gCurrentAnimalId = EVO;
                             D_803E9820 = 27;
                             D_803E9822 = 2;

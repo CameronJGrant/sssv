@@ -1126,6 +1126,7 @@ void func_80391A38_7A30E8(void) {
 }
 
 #ifdef NON_MATCHING
+// WIP: 60 words off (your draft: 137). no-code fakes (if (prevZ) {}, t = new_var2;, t = z; prevZ = t;); loop-1 registers left
 // CURRENT (1310)
 void func_80391C90_7A3340(Gfx **dl, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5) {
     s32 pad[3];
@@ -1155,6 +1156,7 @@ void func_80391C90_7A3340(Gfx **dl, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
     gSPTexture((*dl)++, 32768, 32768, 0, G_TX_RENDERTILE, G_ON);
 
     // populate unk31070[0..23]
+
     for (i = 0; i < 12; i++) {
         new_var2 = (i * 31) << 6;
 
@@ -1162,10 +1164,13 @@ void func_80391C90_7A3340(Gfx **dl, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
 
         if (i == 11) {
             // final iteration
+            t = new_var2;
             z = ((z - prevZ) / 2) + prevZ;
         }
         // Need to not use v0
-        prevZ = z;
+        t = z;
+        prevZ = t;
+
 
         idx = i * 2;
 
@@ -1175,10 +1180,11 @@ void func_80391C90_7A3340(Gfx **dl, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
         /* left */
         gDisplayListContext->unk31070[idx].v.ob[0] = arg1 - 1;
         gDisplayListContext->unk31070[idx].v.ob[1] = arg5;
-        gDisplayListContext->unk31070[idx].v.ob[2] = z;
+        gDisplayListContext->unk31070[idx].v.ob[2] = t;
         gDisplayListContext->unk31070[idx].v.cn[0] = 0xFF;
         gDisplayListContext->unk31070[idx].v.cn[1] = 0xFF;
         gDisplayListContext->unk31070[idx].v.cn[2] = 0xFF;
+
         gDisplayListContext->unk31070[idx].v.cn[3] = 0xFF;
         gDisplayListContext->unk31070[idx].v.tc[0] = 0;
         gDisplayListContext->unk31070[idx].v.tc[1] = t;
@@ -1187,7 +1193,7 @@ void func_80391C90_7A3340(Gfx **dl, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
         // need to get arg3 + 1 into s0
         gDisplayListContext->unk31070[idx+1].v.ob[0] = arg3 + 1;
         gDisplayListContext->unk31070[idx+1].v.ob[1] = arg5;
-        gDisplayListContext->unk31070[idx+1].v.ob[2] = z;
+        gDisplayListContext->unk31070[idx+1].v.ob[2] = t;
         gDisplayListContext->unk31070[idx+1].v.cn[0] = 0xFF;
         gDisplayListContext->unk31070[idx+1].v.cn[1] = 0xFF;
         gDisplayListContext->unk31070[idx+1].v.cn[2] = 0xFF;
@@ -1196,7 +1202,8 @@ void func_80391C90_7A3340(Gfx **dl, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
         gDisplayListContext->unk31070[idx+1].v.tc[1] = t;
     }
 
-    gSPVertex((*dl)++, K0_TO_PHYS(&gDisplayListContext->unk31070[0]), 31, 0);
+        gSPVertex((*dl)++, K0_TO_PHYS(&gDisplayListContext->unk31070[0]), 31, 0);
+    if (prevZ) {}
 
     // Draw 11 quads
     for (i = 0; i < 22; i += 2) {

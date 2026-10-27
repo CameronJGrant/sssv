@@ -34,6 +34,7 @@ extern Gfx D_04003630_E0BF0[];
 
 // POLAR_BEAR
 #ifdef NON_MATCHING
+// WIP: 7 words off (your draft: 27). stack exact; only the spAC block registers differ (tick/timer t9/t8 vs t8/t4)
 // reg + stack
 void func_80365F10_7775C0(void) {
     LimbConfig spB8;
@@ -44,11 +45,8 @@ void func_80365F10_7775C0(void) {
     s16 spAE;
     u16 spAC;
     s16 spAA;
-    u8  new_var;
-    u8  temp_v0;
     u16 ticks_remaining;
 
-    s16 pad;
 
     f32 spA4;
 
@@ -219,7 +217,7 @@ void func_80365F10_7775C0(void) {
             }
         }
         func_8038064C_791CFC();
-        if (((gDisplayListContext->usedModelViewMtxs + 0x1E) < 250) && (D_803F2EDA != 0) && ((D_803D5538 != 0) || (temp_v0 = gCameraUiState, (temp_v0 == 0)) || (temp_v0 == 2) || ((temp_v0 == 1) && (D_803F2AA3 >= 0xB))) && ((D_803F2C18[0] != 0) || (D_803D5538 == 0) || ((gCameras[gCameraId].cameraMode != 3) && (gCameras[gCameraId].cameraMode != 0x11)) || (gCameras[gCameraId].zoomIndex != -3))) {
+        if (((gDisplayListContext->usedModelViewMtxs + 0x1E) < 250) && (D_803F2EDA != 0) && ((D_803D5538 != 0) || (!gCameraUiState) || (gCameraUiState == 2) || ((gCameraUiState == 1) && (D_803F2AA3 >= 0xB))) && ((D_803F2C18[0] != 0) || (D_803D5538 == 0) || ((gCameras[gCameraId].cameraMode != 3) && (gCameras[gCameraId].cameraMode != 0x11)) || (gCameras[gCameraId].zoomIndex != -3))) {
             if (D_803D5524->animalType == POLAR_BEAR) {
                 spAA = D_803D552C->heading;
             } else {
@@ -241,10 +239,9 @@ void func_80365F10_7775C0(void) {
                     GPACK_RGBA5551(248, 248, 248, 1), // white
                     0);
             } else if (D_803D552C->attackState == ATTACK_STATE_CHARGE_END) {
-                spAC = gGameplayTick - D_803D552C->attackTimer;
-
+                spAC = (gGameplayTick - D_803D552C->attackTimer) & 0xFFFF;
                 func_802DC2AC_6ED95C(10);
-                spA4 = D_803B4378_7C5A28[spAC & 0xFFFF];
+                spA4 = D_803B4378_7C5A28[spAC];
             } else {
                 spA4 = 0.0f;
             }
@@ -394,8 +391,9 @@ void func_80365F10_7775C0(void) {
     }
 
     if ((D_803D5524->animalType == POLAR_BEAR_DEFENDING)) {
-        new_var = D_803D552C->movementMode;
-        if ((D_803D552C->movementMode == MOVEMENT_MODE_2) || (new_var == MOVEMENT_MODE_DEACTIVATED)) {
+    if (D_803D552C->movementMode) {}
+    if (D_803D552C->movementMode == 2) {}
+        if ((D_803D552C->movementMode == MOVEMENT_MODE_2) || (D_803D552C->movementMode == MOVEMENT_MODE_DEACTIVATED)) {
             load_animal(POLAR_BEAR);
             func_802A4390_6B5A40();
         }

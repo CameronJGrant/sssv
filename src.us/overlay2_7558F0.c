@@ -698,6 +698,7 @@ void func_803458B8_756F68(Gfx **dl, Vtx *vtx, s16 num) {
 }
 
 #if 0
+// WIP: 966 words off (your draft: 971). OS_PHYSICAL_TO_K0(x) -> x + 0x80000000; still 8 instructions short
 // CURRENT (4876)
 extern int COMBINED;
 extern int SHADE_ALPHA;
@@ -711,6 +712,7 @@ extern int PRIM_LOD_FRAC;
 // Emit the opaque cell DL for a batch prepared by func_80344240_7558F0.
 // arg1[].idx points back into the raw geo stream; arg1[].v is batch-local.
 void func_803458FC_756FAC(Gfx **dl, struct115 *arg1, s16 numVtxs) {
+    s32 pad0;
     s16 i;          // sp17A
     s16 vtxsUsed;   // sp178
     s16 j;
@@ -723,7 +725,7 @@ void func_803458FC_756FAC(Gfx **dl, struct115 *arg1, s16 numVtxs) {
     s32 s;
     s32 t;
 
-    s32 pad2;
+
 
     vtxsUsed = 0;
 
@@ -791,7 +793,7 @@ void func_803458FC_756FAC(Gfx **dl, struct115 *arg1, s16 numVtxs) {
 
                         gDPLoadMultiBlock(
                             (*dl)++,
-                            OS_PHYSICAL_TO_K0(D_0102C810_660E0_bin), // + 0x8000000
+                            D_0102C810_660E0_bin + 0x80000000, // + 0x8000000
                             0x0000,
                             6,
                             G_IM_FMT_I,
@@ -961,8 +963,8 @@ void func_803458FC_756FAC(Gfx **dl, struct115 *arg1, s16 numVtxs) {
             for (j = 0; j < 4; j++) {
                 if ((arg1[i].flags[j] != 0) && (arg1[i].flags[j] & 1)) {
                     // Reused vertex with different UVs: patch tc before drawing this face.
-                    t = (D_803F2C80[arg1[i].idx].unk4[j].tc1 << 5);
                     s = (D_803F2C80[arg1[i].idx].unk4[j].tc0 << 5);
+                    t = (D_803F2C80[arg1[i].idx].unk4[j].tc1 << 5);
 
                     gSPModifyVertex(
                         (*dl)++,
@@ -989,8 +991,8 @@ void func_803458FC_756FAC(Gfx **dl, struct115 *arg1, s16 numVtxs) {
             for (j = 0; j < 3; j++) {
                 if ((arg1[i].flags[j] != 0) && (arg1[i].flags[j] & 1)) {
                     // Reused vertex with different UVs: patch tc before drawing this face.
-                    t = (D_803F2C80[arg1[i].idx].unk4[j].tc1 << 5);
                     s = (D_803F2C80[arg1[i].idx].unk4[j].tc0 << 5);
+                    t = (D_803F2C80[arg1[i].idx].unk4[j].tc1 << 5);
 
                     gSPModifyVertex(
                         (*dl)++,
@@ -1053,7 +1055,7 @@ void func_80346AB0_758160(Gfx **dl, u8 idx) {
 }
 
 #ifdef NON_MATCHING
-
+// WIP: 21 words off (your draft: 349). your commented-out `& 0xFFFF & 0xFFFF` fake fixed the tail; 19 words of register colouring left
 extern int COMBINED;
 extern int SHADE_ALPHA;
 extern int TEXEL0;
@@ -1075,7 +1077,7 @@ void func_80346BB4_758264(Gfx **dl, struct115* arg1, s16 numVtxs) {
     s16 sp28E; // needs image loading?
 
     s16 a1;
-    s16 pad2[13];
+    s16 pad2[11];
 
     s16 var_v0;
 
@@ -1236,7 +1238,7 @@ void func_80346BB4_758264(Gfx **dl, struct115* arg1, s16 numVtxs) {
                 (!(vtxFlags & 0x200)) &&
                 (!(vtxFlags & 0x100))) {
 
-                vtxFlags = D_803F2C80[arg1[i].idx].header.flags;
+                {struct102 *p = D_803F2C80; var_v0 = arg1[i].idx; vtxFlags = p[var_v0].header.flags;}
                 if (variant >= 32) {
                     if (D_803F2C84 != 0xE) {
                         gDPPipeSync((*dl)++);
@@ -1263,7 +1265,7 @@ void func_80346BB4_758264(Gfx **dl, struct115* arg1, s16 numVtxs) {
                             if ((variant - 33) == 9) {
                                 if (0) {};
                                 // why cant we use OS_PHYSICAL_TO_K0 here?
-                                gDPSetTextureImage((*dl)++, G_IM_FMT_I, G_IM_SIZ_16b, 1, (D_0102C810_660E0_bin + 0x8000000 + 0x1000));
+                                gDPSetTextureImage((*dl)++, G_IM_FMT_I, G_IM_SIZ_16b, 1, (D_0102C810_660E0_bin + 0x80000000 + 0x1000));
                                 gDPSetTile((*dl)++, G_IM_FMT_I, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, 5, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 5, G_TX_NOLOD);
                                 gDPLoadSync((*dl)++);
                                 gDPLoadBlock((*dl)++, G_TX_LOADTILE, 0, 0, 511, 512);
@@ -1272,7 +1274,7 @@ void func_80346BB4_758264(Gfx **dl, struct115* arg1, s16 numVtxs) {
                                 gDPSetTileSize((*dl)++, G_TX_RENDERTILE, 0, 0, 124, 124);
                             } else {
 
-                                gDPSetTextureImage((*dl)++, G_IM_FMT_I, G_IM_SIZ_16b, 1, (D_0102C810_660E0_bin + 0x8000000));
+                                gDPSetTextureImage((*dl)++, G_IM_FMT_I, G_IM_SIZ_16b, 1, (D_0102C810_660E0_bin + 0x80000000));
                                 gDPSetTile((*dl)++, G_IM_FMT_I, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, 5, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 5, G_TX_NOLOD);
                                 gDPLoadSync((*dl)++);
                                 gDPLoadBlock((*dl)++, G_TX_LOADTILE, 0, 0, 511, 512);
@@ -1322,7 +1324,7 @@ void func_80346BB4_758264(Gfx **dl, struct115* arg1, s16 numVtxs) {
                 } else {
                     // FAKE  & 0xFFFF
                     // var_v0 = (vtxFlags & VTX_TRIANGLE & 0xFFFF & 0xFFFF) ? 3 : 4;
-                    var_v0 = (vtxFlags & VTX_TRIANGLE) ? 3 : 4;
+                    var_v0 = (vtxFlags & VTX_TRIANGLE & 0xFFFF & 0xFFFF) ? 3 : 4;
 
                     // nonsense
                     for (a1 = 0; (a1 < var_v0); var_v0++) {

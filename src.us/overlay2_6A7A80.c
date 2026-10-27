@@ -149,6 +149,7 @@ void func_80296544_6A7BF4(void) {
 }
 
 #ifdef NON_MATCHING
+// WIP: 224 words off (your draft: 232). own s16 for the z-direction nextWater; prelude temps should start at t2 (like func_8029726C)
 // CURRENT (2259)
 void func_80296C8C_6A833C(struct063 arg0[73][129]) {
     s16 xPos;
@@ -158,11 +159,12 @@ void func_80296C8C_6A833C(struct063 arg0[73][129]) {
     s16 temp_a0;
     s16 temp_s4;
     s16 delta;
+    s16 nw2;
 
-    u32 Start1;
     u32 Start2;
-    u32 End1;
+    u32 Start1;
     u32 End2;
+    u32 End1;
 
     s32 pad;
     s32 rand;
@@ -232,17 +234,17 @@ void func_80296C8C_6A833C(struct063 arg0[73][129]) {
                 }
 
                 curWater = arg0[xPos][zPos].unk6;
-                nextWater = arg0[xPos][zPos+1].unk6; // unkE
-                if (nextWater < curWater) {
+                nw2 = arg0[xPos][zPos+1].unk6; // unkE
+                if (nw2 < curWater) {
                     delta = arg0[xPos][zPos+1].unk0; // unk8
                     if (((delta + 1) << 1) < curWater) {
-                        if ((nextWater == 0) && (gWaterAnimState.unk20F == 0)) {
-                            nextWater = (delta << 1);
+                        if ((nw2 == 0) && (gWaterAnimState.unk20F == 0)) {
+                            nw2 = (delta << 1);
                         }
-                        if ((delta < arg0[xPos][zPos].unk0) && (nextWater < (arg0[xPos][zPos].unk0 << 1))) {
+                        if ((delta < arg0[xPos][zPos].unk0) && (nw2 < (arg0[xPos][zPos].unk0 << 1))) {
                             delta = (curWater - (arg0[xPos][zPos].unk0 << 1));
                         } else {
-                            delta = (curWater - nextWater) / 2;
+                            delta = (curWater - nw2) / 2;
                             if (delta > 1) {
                                 delta += SSSV_RAND(2);
                             }
@@ -251,12 +253,12 @@ void func_80296C8C_6A833C(struct063 arg0[73][129]) {
                             delta = 0;
                         }
                         curWater = curWater - delta;
-                        nextWater = nextWater + delta;
+                        nw2 = nw2 + delta;
                         arg0[xPos][zPos].unk7 = (arg0[xPos][zPos].unk7 & 0xF0) + (delta & 7);
                         if (curWater <= (arg0[xPos][zPos].unk0 << 1)) {
                             curWater = 0;
                         }
-                        arg0[xPos][zPos+1].unk6 = nextWater; // unkE
+                        arg0[xPos][zPos+1].unk6 = nw2; // unkE
                         arg0[xPos][zPos].unk6 = curWater;
                     }
                 }
@@ -264,9 +266,9 @@ void func_80296C8C_6A833C(struct063 arg0[73][129]) {
                 if (((guRandom() % 31) == 4)) {
 
                     rand = guRandom();
-                    temp_s4 = (xPos << 6) + (rand % 63);
+                    temp_s4 = (rand % 63) + (xPos << 6);
                     rand = guRandom();
-                    temp_a0 = (zPos << 6) + (rand % 63);
+                    temp_a0 = (rand % 63) + (zPos << 6);
 
                     if (((1 - (((D_803C0740[temp_s4 >> six][temp_a0 >> 6].unk7 >> 4) & 8) >> 2)) * (((D_803C0740[temp_s4 >> 6][temp_a0 >> 6].unk7 & 0xF0) >> 4) & 7)) ||
                         ((1 - (((D_803C0740[temp_s4 >> 6][temp_a0 >> 6].unk7     ) & 8) >> 2)) * (  D_803C0740[temp_s4 >> 6][temp_a0 >> 6].unk7               & 7))) {

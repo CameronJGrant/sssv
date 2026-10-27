@@ -2388,8 +2388,10 @@ void func_802C4448_6D5AF8(s16 arg0) {
 
 // ordering of assignments is wrong
 #if 0
+// WIP: 72 words off (your draft: 304). size and frame right; D_803D5530 spill slot and the k truncation still differ
 // CURRENT (7447)
 void func_802C44E8_6D5B98(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
+    s32 phi_v1;
     s16 sp42;
     s16 sp40;
     s16 sp3E;
@@ -2397,17 +2399,16 @@ void func_802C44E8_6D5B98(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
 
     s16 temp_t9;
     s16 temp_v0;
-    s16 temp_t7;
-    s32 phi_v1;
+    s16 k;
 
-    switch (D_803D5530->state) {
+    phi_v1 = D_803D5530->state;
+    switch (phi_v1) {
     case 142:
     case 144:
         temp_v0 = (D_803D5540 << 4) & 0xFF;
         temp_t9 = ((D_803D5540 << 4) + 0x80) & 0xFF;
-        temp_t7 = (((SIN(temp_v0)) >> 7) * arg3) >> 8;
-        sp42 = temp_t7;
-        sp40 = -temp_t7;
+        sp42 = (((SIN(temp_v0)) >> 7) * arg3) >> 8;
+        sp40 = -sp42;
         if ((temp_v0 > 64) && (temp_v0 < 192)) {
             sp3E = ((((COS(temp_v0 << 1) >> 7) + 0x100) * arg3) >> 0xA);
         } else {
@@ -2425,9 +2426,8 @@ void func_802C44E8_6D5B98(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     case 143:
         temp_v0 = (D_803D5540 << 5) & 0xFF;
         temp_t9 = ((D_803D5540 << 5) + 0x80) & 0xFF;
-        temp_t7 = (((SIN(temp_v0)) >> 7) * arg3) >> 8;
-        sp42 = temp_t7;
-        sp40 = -temp_t7;
+        sp42 = (((SIN(temp_v0)) >> 7) * arg3) >> 8;
+        sp40 = -sp42;
         if ((temp_v0 > 64) && (temp_v0 < 192)) {
             sp3E = (((COS(temp_v0 << 1) >> 7) + 256) * arg3) >> 10;
         } else {
@@ -2467,38 +2467,29 @@ void func_802C44E8_6D5B98(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     D_80203FE0[4].unk2 = D_80203FE0[27].unk2;
     D_80203FE0[4].unk4 = D_80203FE0[27].unk4;
 
-    D_80203FE0[13].unk0 = D_80203FE0[3].unk0;
+    k = (arg3 * 0xB) >> 4;
     D_80203FE0[13].unk2 = D_80203FE0[3].unk2 - arg2;
-    D_80203FE0[13].unk4 = D_80203FE0[3].unk4;
-
-    D_80203FE0[11].unk0 = D_80203FE0[4].unk0;
-    D_80203FE0[11].unk2 = (D_80203FE0[4].unk2 + arg3) - sp3E;
-    D_80203FE0[11].unk4 = D_80203FE0[4].unk4 - sp3C;
-
-    D_80203FE0[14].unk0 = D_80203FE0[4].unk0;
-    D_80203FE0[14].unk2 = D_80203FE0[4].unk2 - arg2;
-    D_80203FE0[14].unk4 = D_80203FE0[4].unk4;
-
-    D_80203FE0[7].unk0 = (D_80203FE0[3].unk0 - ((arg3 * 0xB) >> 4));
-    D_80203FE0[8].unk0 = D_80203FE0[3].unk0;
-    D_80203FE0[9].unk0 = (D_80203FE0[3].unk0 + ((arg3 * 0xB) >> 4));
-
-    D_80203FE0[7].unk2 = (D_80203FE0[3].unk2 + ((arg3 * 0xB) >> 4)) - sp3E;
     D_80203FE0[8].unk2 = (D_80203FE0[3].unk2 + arg3) - sp3E;
-    D_80203FE0[9].unk2 = (D_80203FE0[3].unk2 + ((arg3 * 0xB) >> 4)) - sp3E;
-
     D_80203FE0[7].unk4 = D_80203FE0[3].unk4 - sp3E;
-    D_80203FE0[8].unk4 = D_80203FE0[3].unk4 - sp3E;
+    D_80203FE0[13].unk4 = D_80203FE0[3].unk4;
+    D_80203FE0[9].unk2 = (D_80203FE0[3].unk2 + k) - sp3E;
+    D_80203FE0[11].unk4 = D_80203FE0[10].unk4 = D_80203FE0[12].unk4 = D_80203FE0[4].unk4 - sp3C;
     D_80203FE0[9].unk4 = D_80203FE0[3].unk4 - sp3E;
-
-    D_80203FE0[10].unk0 = D_80203FE0[4].unk0 - ((arg3 * 0xB) >> 4);
-    D_80203FE0[12].unk0 = D_80203FE0[4].unk0 + ((arg3 * 0xB) >> 4);
-
-    D_80203FE0[10].unk2 = (D_80203FE0[4].unk2 + ((arg3 * 0xB) >> 4)) - sp3E;
-    D_80203FE0[12].unk2 = (D_80203FE0[4].unk2 + ((arg3 * 0xB) >> 4)) - sp3E;
-
-    D_80203FE0[10].unk4 = D_80203FE0[4].unk4 - sp3C;
-    D_80203FE0[12].unk4 = D_80203FE0[4].unk4 - sp3C;
+    D_80203FE0[9].unk0 = D_80203FE0[3].unk0 + k;
+    D_80203FE0[14].unk0 = D_80203FE0[4].unk0;
+    D_80203FE0[8].unk4 = D_80203FE0[3].unk4 - sp3E;
+    D_80203FE0[8].unk0 = D_80203FE0[3].unk0;
+    D_80203FE0[14].unk2 = D_80203FE0[4].unk2 - arg2;
+    D_80203FE0[13].unk0 = D_80203FE0[3].unk0;
+    D_80203FE0[7].unk0 = D_80203FE0[3].unk0 - k;
+    D_80203FE0[7].unk2 = (D_80203FE0[3].unk2 + k) - sp3E;
+    D_80203FE0[11].unk2 = (D_80203FE0[4].unk2 + arg3) - sp3E;
+    D_80203FE0[10].unk2 = (D_80203FE0[4].unk2 + k) - sp3E;
+    D_80203FE0[14].unk4 = D_80203FE0[4].unk4;
+    D_80203FE0[10].unk0 = D_80203FE0[4].unk0 - k;
+    D_80203FE0[12].unk2 = (D_80203FE0[4].unk2 + k) - sp3E;
+    D_80203FE0[11].unk0 = D_80203FE0[4].unk0;
+    D_80203FE0[12].unk0 = D_80203FE0[4].unk0 + k;
 
     if (D_803D5530->state == 101) {
         if ((D_803D5524->animalType != SEAGULL2) && (D_803D5524->animalType != VULTURE)) {

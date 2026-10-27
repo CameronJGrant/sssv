@@ -899,71 +899,61 @@ void func_802C6C00_6D82B0(s16 arg0, s16 arg1) {
 
 // only used by rabbit
 #ifdef NON_MATCHING
+// WIP: 55 words off (your draft: 10). semantically corrected: the asm stores the raw D_80203FE0[19].unk4, not unk4+arg1 (the 10-word draft stores the wrong value)
 // CURRENT (55)
-void func_802C6FF4_6D86A4(s16 arg0, s16 arg1) {
-    s16 liftL; // left ear?
-    s16 liftR; // right ear?
-    s16 temp_hi;
-
-    s16 tmp1;
-    s16 tmp2;
-    s16 tmp3;
-    s16 tmp4;
-
-    // fakery
-    tmp3 = 3;
-    tmp2 = D_80203FE0[19].unk2;
-
-    temp_hi = (D_803D5542 + 0x14) % 360;
-
-    liftL = (D_803D5542 < 96) ? (arg1 * (SIN(D_803D5542 << 3) >> 7)) >> 9 : 0;
-    liftR = (temp_hi < 96) ? (arg1 * (SIN(temp_hi << 3) >> 7)) >> 9 : 0;
-
-    if ((D_803D5542 > 192) && (D_803D5542 < 216)) {
-        liftL = (arg1 * (SIN(D_803D5542 << 2) >> 7)) >> 9;
-    }
-
-    if (ABS(liftL) <= 16) {
-        liftL = 16;
-    }
-    if (ABS(liftR) <= 16) {
-        liftR = 16;
-    }
-
-    // not a switch
-    if ((D_803D552C->movementMode == MOVEMENT_MODE_DEACTIVATED) ||
-        (D_803D552C->movementMode == MOVEMENT_MODE_2)) {
-            liftL = liftR = 0;
-    }
-
-    tmp1 = D_80203FE0[19].unk0 - arg0;
-    tmp4 = D_80203FE0[19].unk0 + arg0;
-    tmp2 = D_80203FE0[19].unk2;
-
-    if (0) { };
-
-    tmp3 = D_80203FE0[19].unk4 + arg1;
-
-    D_80203FE0[26].unk0 = tmp1; /* 0xD0 */
-    D_80203FE0[28].unk0 = tmp4; /* 0xE0 */
-
-#pragma _permuter sameline start
-    D_80203FE0[27].unk0 = tmp1; \
-    D_80203FE0[27].unk4 = (tmp3 - (liftL >> 1)); \
-    D_80203FE0[27].unk2 = (tmp2 + (liftL     ));
-#pragma _permuter sameline end
-
-#pragma _permuter sameline start
-    D_80203FE0[29].unk0 = tmp4; \
-    D_80203FE0[29].unk4 = (tmp3 - (liftR >> 1)); \
-    D_80203FE0[29].unk2 = (tmp2 + (liftR     ));
-#pragma _permuter sameline end
-
-    D_80203FE0[26].unk4 = tmp3; /* 0xD4 */
-    D_80203FE0[28].unk4 = tmp3; /* 0xE4 */
-
-    D_80203FE0[26].unk2 = tmp2; /* 0xD2 */
-    D_80203FE0[28].unk2 = tmp2; /* 0xE2 */
+void func_802C6FF4_6D86A4(s16 arg0, s16 arg1)
+{
+  s16 liftL; // left ear?
+  s16 liftR; // right ear?
+  s16 temp_hi;
+  s16 tmp1;
+  s16 tmp2;
+  s16 tmp3;
+  s16 tmp4;
+  s16 x;
+  s16 y;
+  int new_var2;
+  s16 z;
+  long new_var;
+  tmp4 = 3;
+  temp_hi = (D_803D5542 + 0x14) % 360;
+  liftL = (D_803D5542 < 96) ? ((arg1 * (SIN(D_803D5542 << 3) >> 7)) >> 9) : (0);
+  liftR = (temp_hi < 96) ? ((arg1 * (SIN(temp_hi << 3) >> 7)) >> 9) : (0);
+  if ((D_803D5542 > 192) && (D_803D5542 < 216))
+  {
+    new_var2 = arg1 * (SIN(D_803D5542 << 2) >> 7);
+    liftL = new_var2 >> 9;
+  }
+  if (ABS(liftL) <= 16)
+  {
+    liftL = 16;
+  }
+  if (ABS(liftR) <= 16)
+  {
+    liftR = 16;
+  }
+  if ((D_803D552C->movementMode == 5) || (D_803D552C->movementMode == 2))
+  {
+    liftL = (liftR = 0);
+  }
+  y = D_80203FE0[19].unk2;
+  z = D_80203FE0[19].unk4;
+  tmp1 = (D_80203FE0[19].unk0) - arg0;
+  new_var = D_80203FE0[19].unk0;
+  tmp4 = new_var + arg0;
+  tmp3 = z + arg1;
+  D_80203FE0[26].unk0 = tmp1; /* 0xD0 */
+  D_80203FE0[28].unk0 = tmp4; /* 0xE0 */
+  D_80203FE0[27].unk0 = tmp1;
+  D_80203FE0[27].unk4 = (z + arg1) - (liftL >> 1);
+  D_80203FE0[27].unk2 = y + liftL;
+  D_80203FE0[29].unk0 = tmp4;
+  D_80203FE0[29].unk4 = (z + arg1) - (liftR >> 1);
+  D_80203FE0[29].unk2 = y + liftR;
+  D_80203FE0[26].unk4 = z;
+  D_80203FE0[28].unk4 = z;
+  D_80203FE0[26].unk2 = y;
+  D_80203FE0[28].unk2 = y;
 }
 #else
 #pragma GLOBAL_ASM("asm/nonmatchings/overlay2_6D6120/func_802C6FF4_6D86A4.s")

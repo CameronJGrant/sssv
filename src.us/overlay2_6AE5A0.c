@@ -855,7 +855,7 @@ void enqueue_object_display_list_by_flags(Animal *arg0, u16 arg1, u16 arg2, s32 
 }
 
 #ifdef NON_MATCHING
-
+// WIP: 115 words off (your draft: 161). case-block-scoped locals; loop-head register permutation and case 17/20 address regs left
 extern int PRIMITIVE;
 extern int SHADE;
 extern int ENVIRONMENT;
@@ -865,6 +865,7 @@ extern int COMBINED;
 
 // CURRENT (13892)
 void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
+    s32 pad0;
     CollisionNode *var_a1;      // sp480
 
     Animal    *animal;
@@ -887,8 +888,6 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
 
     s32 new_var4;
 
-    s32 temp_t8;
-    s32 temp_t7;
     s16 var_s4;
     s16 primAlpha;
     s16 envAlpha;
@@ -901,20 +900,12 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
 
     s32 scale;
 
-    s32 new_var3;
+    s32 padA[10];
 
-    u8  pad[0x68];
 
-    struct077 sp318; // currently at 0x3B8 (i.e. 0x70 too high...)
-    struct077 sp2AC;
-    s32 sp2A8;
 
-    s32 var_t1;
-    s32 var_t3; // sp298?
 
-    struct077 sp210;
 
-    u8 sp1AC[3]; // uninitialised?
 
     D_803D3430 = D_803D3430 + 1;
     D_803D3430 = D_803D3430 % 5;
@@ -1226,7 +1217,8 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                     D_803D3434->unk39310++;
                                 }
                                 break;
-                            case 8:
+                            case 8: {
+                                struct077 sp318; // currently at 0x3B8 (i.e. 0x70 too high...)
                                 if (D_803D343C->unk16C->displayList1 != NULL) {
                                     enqueue_object_display_list_by_flags(
                                         D_803D343C,
@@ -1262,6 +1254,7 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                         D_803D343C->unk200[2]);
                                 }
                                 break;
+                            }
                             case 9:
                                 enqueue_texture_grouped_display_list_instance(
                                     &D_803D3FF8,
@@ -1338,7 +1331,8 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                     gSPPopMatrix(gXluDL++, G_MTX_MODELVIEW);
                                 }
                                 break;
-                            case 12:
+                            case 12: {
+                                s32 padB[9]; struct077 sp2AC;
                                 if (D_803D343C->state == 1) {
                                     red2 = 0xFF;
                                 } else {
@@ -1392,7 +1386,9 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                     0,
                                     0);
                                 break;
-                            case 13:
+                            }
+                            case 13: {
+                                s32 sp2A8; s32 temp_t7; s32 temp_t8; s32 var_t1; s32 var_t3; s32 new_var3;
                                 enqueue_object_display_list_by_flags(D_803D343C, D_803D343C->unk3E, D_803D343C->unk40, D_803D343C->position.xPos.w, D_803D343C->position.zPos.w, D_803D343C->position.yPos.w, D_803D343C->zRotation, D_803D343C->yRotation, D_803D343C->unk16C->displayList1);
                                 sp2A8 = (D_803D343C->position.yPos.h + (D_803D343C->unk42 * 0.6));
                                 temp_t7 = ((COS(D_803D343C->Info.unk152) >> 7) * (D_803D343C->unk42 >> 2)) >> 8;
@@ -1413,10 +1409,9 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                     if (red > 0xFF) {
                                         red = 0xFF;
                                     }
-                                    green = red >> 1;
                                     gDPPipeSync(gLayer0DL++);
                                     gSPDisplayList(gLayer0DL++, D_01004970_3E240);
-                                    gDPSetPrimColor(gLayer0DL++, 0, 0, (0xFF - red), (0xFF - green), 0xFF, 0xA0);
+                                    gDPSetPrimColor(gLayer0DL++, 0, 0, (0xFF - red), (0xFF - (red >> 1)), 0xFF, 0xA0);
                                     func_80125FE0(
                                         &D_803D3434->modelViewMtx[D_803D3434->usedModelViewMtxs],
                                         D_803D343C->position.xPos.w,
@@ -1431,7 +1426,7 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                     gSPDisplayList(gLayer0DL++, D_0101B000_548D0);
                                     gSPPopMatrix(gLayer0DL++, G_MTX_MODELVIEW);
 
-                                    gDPSetPrimColor(gLayer0DL++, 0, 0, red, green + 0x80, 0xFF, 0xA0);
+                                    gDPSetPrimColor(gLayer0DL++, 0, 0, red, (red >> 1) + 0x80, 0xFF, 0xA0);
 
                                     func_80125FE0(
                                         &D_803D3434->modelViewMtx[D_803D3434->usedModelViewMtxs],
@@ -1460,6 +1455,7 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                     0,
                                     0);
                                 break;
+                            }
                             case 15:
                             enqueue_object_display_list_by_flags(
                                 D_803D343C,
@@ -1532,7 +1528,8 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                 gDPTileSync(gXluDL++);
                                 render_rig_instance_xlu(D_803D343C->position.xPos.w, D_803D343C->position.zPos.w, D_803D343C->position.yPos.w + (D_803D343C->unk42 << 0xF), D_803D343C->zRotation, D_803D343C->yRotation, D_803D343C->unk40 << 5, 1, 0);
                                 break;
-                            case 17:
+                            case 17: {
+                                s32 padD[2]; struct077 sp210;
                                 enqueue_texture_grouped_display_list_instance(&D_803D3FF8, D_803D343C->unk3E & 0x3F, D_803D343C->unk40, D_803D343C->position.xPos.w, D_803D343C->position.zPos.w, D_803D343C->position.yPos.w + (D_803D343C->unk42 << 0xF), D_803D343C->zRotation, D_803D343C->yRotation, D_803D343C->unk16C->displayList1);
                                 if (D_803D343C->unk200[0] & 2) {
                                     func_802F603C_7076EC(D_803A0580_7B1C30[0][0], D_803A0580_7B1C30[0][1], D_803A0580_7B1C30[0][2], D_803D343C->zRotation, D_803D343C->yRotation, D_803D343C->unk40, &sp210);
@@ -1617,6 +1614,7 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                     }
                                 }
                                 break;
+                            }
                             case 18:
                                 if (D_803D343C->state == 1) {
                                     enqueue_dynamic_texture_billboard(
@@ -1724,7 +1722,8 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                     }
                                 }
                                 break;
-                            case 20:
+                            case 20: {
+                                s32 padE[3]; u8 sp1AC[3]; s32 padF;
                                 if (D_803D343C->state == 1) {
                                     sp1AC[0] = 0;
                                 } else {
@@ -1772,6 +1771,7 @@ void func_8029F7D4_6B0E84(DisplayList *arg0, Objects *arg1) {
                                     }
                                 }
                                 break;
+                            }
                             case 21:
                                 gSPDisplayList(gXluDL++, D_01004AF8_3E3C8);
                                 if (gLevelProgress & LEVEL_PROGRESS_FLAG_4) {
